@@ -12,7 +12,7 @@ interface RenderTemplateProps {
 
 // Register a new liquid engine
 const engine = new Liquid({
-  root: path.resolve(__dirname, "../../email-templates"),
+  root: path.resolve(__dirname, "../../../templates"),
   cache: false,
   extname: ".liquid",
   strictVariables: false,
@@ -25,7 +25,7 @@ const renderTemplate = async (props: RenderTemplateProps) => {
   // render template with data
   let markup = await engine.renderFile(
     `${props.user}_${props.template}.liquid`,
-    props.data
+    { ...props.data, app_url: process.env.APP_URL }
   );
   // minify the markup
   markup = await minify(markup, {

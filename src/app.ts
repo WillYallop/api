@@ -24,5 +24,6 @@ app.use(express.json());
 
 // Routes
 app.use("/v1/email", email);
+app.use(express.static("public"));
 
 export default app;
