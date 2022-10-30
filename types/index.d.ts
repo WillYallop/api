@@ -9,6 +9,6 @@ type RecaptchaErrors = Array<string>;
 interface ErrorResponse {
   code: number;
   message: string;
-  type: "VALIDATION" | "RECAPTCHA" | "UNKNOWN";
+  type: "VALIDATION" | "RECAPTCHA" | "UNKNOWN" | "EMAIL";
   errors?: NIVErrorRes | RecaptchaErrors;
 }

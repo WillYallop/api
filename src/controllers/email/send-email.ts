@@ -25,54 +25,77 @@ const sendEmailController = async (
   req: Request<{}, {}, SendEmailProps>,
   res: Response
 ) => {
-  const { user, template, to, subject, token, data } = req.body;
+  try {
+    const { user, template, to, subject, token, data } = req.body;
 
-  // Validate request body
-  const v = new Validator(req.body, {
-    user: "required|string",
-    template: "required|string",
-    token: "required|string",
-    to: "required|email",
-    subject: "required|string",
-    data: "required|object",
-  });
+    // Validate request body
+    const v = new Validator(req.body, {
+      user: "required|string",
+      template: "required|string",
+      token: "required|string",
+      to: "required|email",
+      subject: "required|string",
+      data: "required|object",
+    });
 
-  const pass = await v.check();
-  if (!pass) {
+    const pass = await v.check();
+    if (!pass) {
+      errorResponse(res, {
+        code: 400,
+        type: "VALIDATION",
+        message: "Invalid request body",
+        errors: formatNIVErrors(v.errors),
+      });
+    }
+
+    // Get users details
+    const userDetails = getUser(user);
+
+    // Verify turnstile token
+    const siteVerified = await verifySite(token, userDetails.turnstileSecret);
+    if (!siteVerified.success) {
+      errorResponse(res, {
+        code: 401,
+        type: "RECAPTCHA",
+        message: "Invalid turnstile token",
+        errors: siteVerified.errors,
+      });
+    }
+
+    // Render the template
+    const templateHTML = await renderTemplate({
+      user: user,
+      template,
+      data,
+    });
+
+    // Send the email
+    const sendEmailRes = await sendEmail({
+      html: templateHTML,
+      to: to,
+      subject: subject,
+      user: userDetails,
+    });
+
+    if (!sendEmailRes.success) {
+      errorResponse(res, {
+        code: 500,
+        type: "EMAIL",
+        message: sendEmailRes.message || "Failed to send email",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+    });
+  } catch (err) {
+    const error = err as Error;
     errorResponse(res, {
-      code: 400,
-      type: "VALIDATION",
-      message: "Invalid request body",
-      errors: formatNIVErrors(v.errors),
+      code: 500,
+      type: "UNKNOWN",
+      message: error.message,
     });
   }
-
-  // Get users details
-  const userDetails = getUser(user);
-
-  // Verify turnstile token
-  const siteVerified = await verifySite(token, userDetails.turnstileSecret);
-  if (!siteVerified.success) {
-    errorResponse(res, {
-      code: 401,
-      type: "RECAPTCHA",
-      message: "Invalid turnstile token",
-      errors: siteVerified.errors,
-    });
-  }
-
-  // Render the template
-  const templateHTML = await renderTemplate({
-    template,
-    data,
-  });
-
-  // Send the email
-  await sendEmail();
-
-  res.status(200).json({
-    message: "Email sent",
-  });
 };
 
 export default sendEmailController;
