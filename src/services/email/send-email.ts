@@ -33,7 +33,7 @@ const sendEmail = async (props: SendEmailProps) => {
 
   const toAddresses = [to];
   if (user.sendToSelf) {
-    // toAddresses.push(user.auth.user);
+    toAddresses.push(user.email);
   }
 
   const mailOptions = {
