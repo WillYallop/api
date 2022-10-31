@@ -76,7 +76,6 @@ const sendEmailController = async (
       subject: subject,
       user: userDetails,
     });
-
     if (!sendEmailRes.success) {
       errorResponse(res, {
         code: 500,

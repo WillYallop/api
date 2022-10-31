@@ -31,20 +31,29 @@ const sendEmail = async (props: SendEmailProps) => {
     },
   });
 
-  const toAddresses = [to];
-  if (user.sendToSelf) {
-    toAddresses.push(user.email);
-  }
-
-  const mailOptions = {
+  const outboundMailOptions = {
     from: user.email,
-    to: toAddresses,
+    to: to,
     subject: subject,
     html: html,
+    replyTo: user.email,
   };
 
   try {
-    await transporter.sendMail(mailOptions);
+    // Outbound
+    await transporter.sendMail(outboundMailOptions);
+
+    // Inbound
+    if (user.sendToSelf) {
+      await transporter.sendMail({
+        from: user.email,
+        to: user.email,
+        subject: `Sent to ${to}`,
+        html: html,
+        replyTo: to,
+      });
+    }
+
     return {
       success: true,
     };
