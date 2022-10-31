@@ -1,7 +1,9 @@
 <!-- https://autoprefixer.github.io/ -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -9,7 +11,7 @@
       rel="stylesheet"
     />
     <style type="text/css">
-      * {
+       * {
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         font-family: helvetica;
@@ -19,7 +21,7 @@
       p {
         color: #1d1d1d;
       }
-      li {
+      span {
         color: #1f1f1f;
       }
       body {
@@ -29,23 +31,16 @@
       .container {
         max-width: 650px;
         margin: 0 auto;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
         padding: 20px 5px;
       }
       .logo {
         height: 40px;
+        display: block;
+        text-align: center;
       }
-      .logo svg {
+      .logo img {
         height: 40px;
+        display:block;
       }
       .inner {
         background-color: #fff;
@@ -78,9 +73,9 @@
       .content-outer-one {
         padding-bottom: 20px;
       }
-        .content-outer-two {
-            padding-top: 0;
-        }
+      .content-outer-two {
+        padding-top: 0;
+      }
       .content-outer:last-child {
         padding-top: 0;
       }
@@ -93,23 +88,23 @@
         border: 1px solid #dadada;
         border-radius: 10px;
       }
-      .content-inner ul {
+      .content-inner div {
         list-style: none;
         padding: 0;
         margin: 0;
       }
-      .content-inner ul li {
+      .content-inner div .list-item {
         padding: 5px 0;
         margin: 0;
       }
-      .content-inner ul li span {
+      .content-inner div .list-item span {
         font-weight: 700;
         margin-right: 10px;
       }
-      .content-inner ul li:first-child {
+      .content-inner div .list-item:first-child {
         padding-top: 0;
       }
-      .content-inner ul li:last-child {
+      .content-inner div .list-item:last-child {
         padding-bottom: 0;
       }
       a {
@@ -117,11 +112,17 @@
       }
     </style>
   </head>
-  <body style="background-color: #ebecf0;">
+  <body style="background-color: #ebecf0">
     <div class="container">
       <!-- Logo -->
       <a href="https://www.anyrep.co.uk" class="logo">
-        <img src="{{ app_url }}/assets/anyrep-logo.svg" alt="Anyrep Appliance Repairs" />
+        <img
+          src="{{ app_url }}/assets/anyrep-logo.png"
+          alt="Anyrep Appliance Repairs"
+          title="Anyrep Appliance Repairs"
+          height="40px"
+          width="116px"
+        />
       </a>
       <!-- Inner -->
       <div class="inner">
@@ -137,26 +138,26 @@
         <div class="content-outer content-outer-one">
           <h2>Details</h2>
           <div class="content-inner">
-            <ul>
-              <li><span>Name</span> {{ name }}</li>
-              <li>
+            <div>
+              <div class="list-item"><span>Name</span> {{ name }}</div>
+              <div class="list-item">
                 <span>Email</span>
                 <a href="mailto:{{ email }}">{{ email }}</a>
-              </li>
-              <li>
+              </div>
+              <div class="list-item">
                 <span>Phone</span>
                 <a href="tel:{{ number }}">{{ number }}</a>
-              </li>
-              <li><span>Appliance</span> {{ appliance }}</li>
-            </ul>
+              </div>
+              <div class="list-item">
+                <span>Appliance</span> {{ appliance }}
+              </div>
+            </div>
           </div>
         </div>
         <div class="content-outer content-outer-two">
           <h2>Message</h2>
           <div class="content-inner">
-            <p>
-              {{ message }}
-            </p>
+            <p>{{ message }}</p>
           </div>
         </div>
       </div>

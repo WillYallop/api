@@ -48,7 +48,7 @@ const sendEmail = async (props: SendEmailProps) => {
       await transporter.sendMail({
         from: user.email,
         to: user.email,
-        subject: `Sent to ${to}`,
+        subject: subject,
         html: html,
         replyTo: to,
       });

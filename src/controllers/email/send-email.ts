@@ -40,7 +40,7 @@ const sendEmailController = async (
 
     const pass = await v.check();
     if (!pass) {
-      errorResponse(res, {
+      return errorResponse(res, {
         code: 400,
         type: "VALIDATION",
         message: "Invalid request body",
@@ -54,7 +54,7 @@ const sendEmailController = async (
     // Verify turnstile token
     const siteVerified = await verifySite(token, userDetails.turnstileSecret);
     if (!siteVerified.success) {
-      errorResponse(res, {
+      return errorResponse(res, {
         code: 401,
         type: "RECAPTCHA",
         message: "Invalid turnstile token",
@@ -77,19 +77,19 @@ const sendEmailController = async (
       user: userDetails,
     });
     if (!sendEmailRes.success) {
-      errorResponse(res, {
+      return errorResponse(res, {
         code: 500,
         type: "EMAIL",
         message: sendEmailRes.message || "Failed to send email",
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
     });
   } catch (err) {
     const error = err as Error;
-    errorResponse(res, {
+    return errorResponse(res, {
       code: 500,
       type: "UNKNOWN",
       message: error.message,
