@@ -2,7 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 // Routes
-import { email } from "./routes/v1";
+import { email, projects } from "./routes/v1";
 
 const app = express();
 
@@ -39,6 +39,7 @@ app.use(express.json());
 
 // Routes
 app.use("/v1/email", email);
+app.use("/v1/projects", projects);
 app.use(express.static("public"));
 
 export default app;
