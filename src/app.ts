@@ -27,7 +27,13 @@ declare global {
   interface ErrorResponse {
     code: number;
     message: string;
-    type: "VALIDATION" | "RECAPTCHA" | "UNKNOWN" | "EMAIL";
+    type:
+      | "VALIDATION"
+      | "RECAPTCHA"
+      | "UNKNOWN"
+      | "EMAIL"
+      | "NOT_FOUND"
+      | "UNAUTHORIZED";
     errors?: NIVErrorRes | RecaptchaErrors;
   }
 }

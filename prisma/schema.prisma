@@ -2,10 +2,27 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id       String     @id @default(auto()) @map("_id") @db.ObjectId
+    email    String     @unique
+    username String     @unique
+    password String
+    Projects Projects[]
+}
+
+model Projects {
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
+    name        String
+    slug        String @unique
+    description String
+    owner       User   @relation(fields: [ownerId], references: [id])
+    ownerId     String
 }
