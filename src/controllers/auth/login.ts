@@ -17,7 +17,7 @@ interface LoginProps {
 
 const loginController = async (
   req: Request<{}, {}, LoginProps>,
-  res: Response
+  res: Response<JSONResponse>
 ) => {
   // Validate request body
   const v = new Validator(req.body, {
@@ -64,9 +64,18 @@ const loginController = async (
 
   // Send response
   return res.status(200).json({
-    data: {
-      user: userExists.user,
+    data: [
+      {
+        id: userExists.user.id,
+        type: "user",
+        attributes: userExists.user,
+      },
+    ],
+    meta: {
       csrf: tokens.CSRFToken,
+    },
+    links: {
+      self: `${process.env.APP_URL}/v1/auth/login`,
     },
   });
 };
